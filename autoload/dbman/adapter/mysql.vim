@@ -28,5 +28,5 @@ function! dbman#adapter#mysql#complete_database(url) abort
 endfunction
 
 function! dbman#adapter#mysql#tables(url) abort
-  return db#adapter#mysql#tables(a:url)
+  return split(system(s:command_for_url(a:url). ' -N -e "show tables"'), "\n")
 endfunction
