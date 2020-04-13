@@ -8,7 +8,7 @@ let g:loaded_dbman_uiaction_autoload = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 function! dbman#uiaction#open( ... ) abort
   let item_index = dbman#util#item_index(line('.'))
-  let item = g:ui_items[item_index]
+  let item = g:dbman_ui_items[item_index]
 
   if item.type == 'db' || item.type == 'saved_group' || item.type == 'tables'
     silent! normal! za
@@ -53,7 +53,7 @@ endfunction
 
 function! dbman#uiaction#delete() abort
   let item_index = dbman#util#item_index(line('.'))
-  let item = g:ui_items[item_index]
+  let item = g:dbman_ui_items[item_index]
 
   if item.type == 'saved_query'
     let continue = input('Delete '.item.filename.'? [y|n]> ', '')
@@ -67,7 +67,7 @@ endfunction
 
 function! dbman#uiaction#fields( ... ) abort
   let item_index = dbman#util#item_index(line('.'))
-  let item = g:ui_items[item_index]
+  let item = g:dbman_ui_items[item_index]
 
   if item.type == 'table'
     let url = item.target.url

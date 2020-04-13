@@ -19,22 +19,35 @@ nnoremap <expr> <Plug>(DBManExecute)     dbman#query#execute()
 nnoremap <expr> <Plug>(DBManExecuteLine) dbman#query#execute() . '_'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Status line function
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! DBManBufferDBName(bufnr)
+  if &ft != 'sql'
+    return ''
+  endif
+  if !has_key(g:dbman_buffer_db, a:bufnr)
+    return ''
+  endif
+  return g:dbman_buffer_db[a:bufnr].name
+endfunction
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Global variables
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:dbman_bufname = ':dbman:'
 let g:dbmaninfo_bufname = ':dbmaninfo:'
-let g:db_list = []
+let g:dbman_db_list = []
 
-let g:buffer_db = {}
-let g:current_db = {}
+let g:dbman_buffer_db = {}
+let g:dbman_current_db = {}
 
-let g:buffer_bindparams = {}
-let g:current_bindparams = {}
+let g:dbman_buffer_bindparams = {}
+let g:dbman_current_bindparams = {}
 
-let g:ui_items = []
+let g:dbman_ui_items = []
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Adapters override
+" Adapters override (used by dadbod)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:db_adapter_sqlite = 'dbman#adapter#sqlite#'
 let g:db_adapter_mysql = 'dbman#adapter#mysql#'

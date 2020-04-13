@@ -36,9 +36,9 @@ function! dbman#ui_render()
   let view = winsaveview()
 
   let text = []
-  let g:ui_items = dbman#uiutil#load_ui_items(db, params)
+  let g:dbman_ui_items = dbman#uiutil#load_ui_items(db, params)
 
-  for item in g:ui_items
+  for item in g:dbman_ui_items
     call add(text, repeat(' ', g:dbman_start_column + (g:dbman_shiftwidth * item.indent)) . item.text)
   endfor
 
@@ -47,12 +47,6 @@ function! dbman#ui_render()
 
   call append(0, text)
 
-  setlocal nomodifiable
+  setlocal nomodifiable nomodified
   call winrestview(view)
-
-  " if first_render
-  "   normal! zX
-  " else
-  "   silent! normal! za
-  " endif
 endfunction

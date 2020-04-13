@@ -14,7 +14,7 @@ endfunction
 function! dbman#connection#list() abort
   call s:load_connections()
 
-  let dbs = map(copy(g:db_list), {k,v -> { 'word': v.name, 'user_data':
+  let dbs = map(copy(g:dbman_db_list), {k,v -> { 'word': v.name, 'user_data':
         \ { 'bufnr' : bufnr(), 'winnr' : winnr() }
         \ }})
 
@@ -28,7 +28,7 @@ endfunction
 
 function! dbman#connection#on_db_selected(idx, item) abort
   if a:idx != -1
-    let db = { 'url': g:db_list[a:idx].url, 'name': g:db_list[a:idx].name }
+    let db = { 'url': g:dbman_db_list[a:idx].url, 'name': g:dbman_db_list[a:idx].name }
     let bufnr = a:item.user_data.bufnr
     let winnr = a:item.user_data.winnr
 
@@ -92,7 +92,7 @@ endfunction
 
 function! s:load_connections()
   let f = expand(g:dbman_connections_file)
-  let g:db_list = []
+  let g:dbman_db_list = []
 
   call s:create_connections_file()
 
@@ -103,12 +103,12 @@ function! s:load_connections()
     elseif db.url == ""
       let db.url = l
     else
-      call add(g:db_list, db)
+      call add(g:dbman_db_list, db)
       let db = { "name" : l, "url" : "" }
     endif
   endfor
 
   if db.name != "" && db.url != ""
-    call add(g:db_list, db)
+    call add(g:dbman_db_list, db)
   endif
 endfunction

@@ -13,7 +13,7 @@ nnoremap <buffer> f :call dbman#uiaction#fields()<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 function! DBManFoldText() abort
   let index = dbman#util#item_index(v:foldstart)
-  let item = g:ui_items[index]
+  let item = g:dbman_ui_items[index]
 
   return repeat(' ', g:dbman_shiftwidth * item.indent - g:dbman_start_column) . item.text
 endfunction
@@ -22,9 +22,9 @@ function! DBManFoldMethod(lnum) abort
   let current_index = a:lnum - 1
   let next_index = a:lnum
 
-  let item = g:ui_items[current_index]
-  if next_index < len(g:ui_items)
-    let next_item = g:ui_items[next_index]
+  let item = g:dbman_ui_items[current_index]
+  if next_index < len(g:dbman_ui_items)
+    let next_item = g:dbman_ui_items[next_index]
   else
     let next_item = { 'indent' : item.indent }
   endif 

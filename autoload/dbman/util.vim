@@ -8,51 +8,51 @@ let g:loaded_dbman_util_autoload = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 function! dbman#util#get_buffer_db(...)
   if a:0
-    return get(g:buffer_db, a:1, {})
+    return get(g:dbman_buffer_db, a:1, {})
   else
-    return get(g:buffer_db, bufnr(), {})
+    return get(g:dbman_buffer_db, bufnr(), {})
   endif
 endfunction
 
 function! dbman#util#set_buffer_db(value,...)
   if a:0
-    let g:buffer_db[a:1] = a:value
+    let g:dbman_buffer_db[a:1] = a:value
   else
-    let g:buffer_db[bufnr()] = a:value
+    let g:dbman_buffer_db[bufnr()] = a:value
   endif
 endfunction
 
 function! dbman#util#get_current_db()
-  return g:current_db
+  return g:dbman_current_db
 endfunction
 
 function! dbman#util#set_current_db(db)
-  let g:current_db = a:db
+  let g:dbman_current_db = a:db
   let b:db = a:db.url
 endfunction
 
 function! dbman#util#get_buffer_bindparams(...)
   if a:0
-    return get(g:buffer_bindparams, a:1, {})
+    return get(g:dbman_buffer_bindparams, a:1, {})
   else
-    return get(g:buffer_bindparams, bufnr(), {})
+    return get(g:dbman_buffer_bindparams, bufnr(), {})
   endif
 endfunction
 
 function! dbman#util#set_buffer_bindparams(params, ...)
   if a:0
-    let g:buffer_bindparams[a:1] = a:params
+    let g:dbman_buffer_bindparams[a:1] = a:params
   else
-    let g:buffer_bindparams[bufnr()] = a:params
+    let g:dbman_buffer_bindparams[bufnr()] = a:params
   endif
 endfunction
 
 function! dbman#util#set_current_bindparams(params)
-  let g:current_bindparams = a:params
+  let g:dbman_current_bindparams = a:params
 endfunction
 
 function! dbman#util#get_current_bindparams()
-  return g:current_bindparams
+  return g:dbman_current_bindparams
 endfunction
 
 function! dbman#util#goto_window(bufname) abort
