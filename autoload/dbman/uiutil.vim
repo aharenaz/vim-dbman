@@ -99,7 +99,7 @@ function! dbman#uiutil#new_saved_query_name(db) abort
 endfunction
 
 function! s:saved_query_filename_template(db) abort
-  return substitute(a:db.name, "\\s*\\|\\$*\\|:\\|_\\|\\*", "", "g") . "_"
+  return substitute(a:db.name, '\\\s*\\\|\\\$*\\\|:\\\|_\\\|\\\*\\\|/', "", "g") . "_"
 endfunction
 
 function! s:saved_query_name_from_path(db, path)
