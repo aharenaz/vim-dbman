@@ -82,10 +82,10 @@ function! dbman#uiaction#fields( ... ) abort
       let line = s:prepad(line, name_maxlen) . ' : ' . field.type
 
       if field.notnull
-        line = line . ' NN '
+        let line = line . ' NN '
       endif
-      if field.default
-        line = line . ' DFLT = ' . field.default
+      if field.default != ''
+        let line = line . ' DF ' . field.default
       endif
 
       call add(lines, line)
