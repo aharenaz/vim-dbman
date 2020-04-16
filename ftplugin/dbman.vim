@@ -7,6 +7,7 @@ nnoremap <buffer> <C-v> :call dbman#uiaction#open('v')<CR>
 nnoremap <buffer> <C-x> :call dbman#uiaction#open('x')<CR>
 nnoremap <buffer> dd  :call dbman#uiaction#delete()<CR>
 nnoremap <buffer> f :call dbman#uiaction#fields()<CR>
+nnoremap <buffer> q :call dbman#uiaction#copy_select_query()<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Folding

@@ -66,8 +66,18 @@ function! dbman#uiaction#delete() abort
 endfunction
 
 function! dbman#uiaction#fields( ... ) abort
-  let item_index = dbman#util#item_index(line('.'))
-  let item = g:dbman_ui_items[item_index]
+  if a:0
+    let item = { 'type' : 'not_found' }
+    for ui in g:dbman_ui_items
+      if ui.type == 'table' && ui.table == a:1
+        let item = ui
+        break
+      endif
+    endfor
+  else
+    let item_index = dbman#util#item_index(line('.'))
+    let item = g:dbman_ui_items[item_index]
+  endif
 
   if item.type == 'table'
     let url = item.target.url
@@ -75,17 +85,17 @@ function! dbman#uiaction#fields( ... ) abort
     let fields = db#adapter#call(url, 'fields', [url, table], [])
     let lines = []
 
-    let name_maxlen = max(map(copy(fields), { k, v -> len(v.name) + (v.pk ? 5 : 0) }))
-
     for field in fields
       let line = (field.pk ? '(PK) ' : '') . field.name
-      let line = s:prepad(line, name_maxlen) . ' : ' . field.type
+      call add(lines, line)
+
+      let line =  repeat(' ', g:dbman_shiftwidth) . field.type
 
       if field.notnull
-        let line = line . ' NN '
+        let line = line . ' NN'
       endif
       if field.default != ''
-        let line = line . ' DF ' . field.default
+        let line = line . ' = ' . field.default
       endif
 
       call add(lines, line)
@@ -97,6 +107,32 @@ function! dbman#uiaction#fields( ... ) abort
 
       call s:info(lines)
     endif
+  endif
+endfunction
+
+function! dbman#uiaction#copy_select_query( ... ) abort
+  if a:0
+    let item = { 'type' : 'not_found' }
+    for ui in g:dbman_ui_items
+      if ui.type == 'table' && ui.table == a:1
+        let item = ui
+        break
+      endif
+    endfor
+  else
+    let item_index = dbman#util#item_index(line('.'))
+    let item = g:dbman_ui_items[item_index]
+  endif
+
+  if item.type == 'table'
+    let url = item.target.url
+    let table = item.table
+    let fields = db#adapter#call(url, 'fields', [url, table], [])
+    let line = 'select ' . join(map(fields, {_, v -> v.name}), ', ')
+    let line = line . "\n" . 'from ' . table . ';'
+
+    let @@ = line
+    let @* = line
   endif
 endfunction
 
@@ -115,10 +151,18 @@ function! s:create_new_window(direction, file) abort
 endfunction
 
 function! s:info(lines) abort
+  let previousWindow = winnr()
+
   if !dbman#util#goto_window(g:dbmaninfo_bufname)
-    silent! exec "split " . g:dbmaninfo_bufname
+    let curWindow = winnr()
+    exe "wincmd l"
+    while curWindow != winnr()
+      let curWindow = winnr()
+      exe "wincmd l"
+    endwhile
+    silent! exec "rightbelow vertical new " . g:dbmaninfo_bufname
     setlocal filetype=dbmaninfo
-    silent! exe 'resize '.g:dbmaninfo_winheight
+    silent! exe 'vertical topleft resize '.g:dbmaninfo_winwidth
   endif
 
   setlocal modifiable
@@ -126,8 +170,9 @@ function! s:info(lines) abort
 
   call append(0, a:lines)
 
-  setlocal nomodifiable
-  exec "wincmd p"
+  setlocal nomodifiable nomodified
+  exe "normal gg"
+  exec previousWindow . "wincmd w"
 endfunction
 
 function! s:postpad(s, amt, ...)

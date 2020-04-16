@@ -45,10 +45,10 @@ function! dbman#connection#on_db_selected(idx, item) abort
       endif
     endif
 
-    call dbman#util#set_buffer_db(db, bufnr)
-    call dbman#util#set_current_db(db)
-
     if db != {}
+      call dbman#util#set_buffer_db(db, bufnr)
+      call dbman#util#set_current_db(db)
+
       echomsg 'DB ' . db.name . ' is selected.'
 
       call dbman#ui()
